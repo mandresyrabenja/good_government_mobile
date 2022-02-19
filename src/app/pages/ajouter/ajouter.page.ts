@@ -2,6 +2,8 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ServiceService } from 'src/app/service/service.service';
+
 
 @Component({
   selector: 'app-ajouter',
@@ -12,7 +14,7 @@ export class AjouterPage implements OnInit {
 
   selectedFile: File = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private signal: ServiceService) {}
 
   ngOnInit() {
   }
@@ -27,7 +29,9 @@ export class AjouterPage implements OnInit {
         console.log(res);
       });
   }
-  readAPI(URL: string){
-    return this.http.get(URL);
+  saveSignal(titre,description,image,long,lat){
+    this.signal.createReport(titre.value,description.value,image.value,long.value,lat.value)
+    .subscribe(res => console.log(res), err => console.error(err)
+    );
   }
 }

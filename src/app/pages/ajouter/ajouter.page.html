@@ -9,11 +9,32 @@
 
 
 <ion-content>
-    <h1 align="center">Titre</h1>
-    <p align="center"><input type="text"></p>
-    <h1 align="center">Desciption</h1>
-    <p align="center"><input type="textarea">
-    <h1 align="center">Location</h1>
-    <input type="file" (change)="onFileSelected($event)">
-    <button type="button" (click)="onUpload()">Importer</button>
+  <ion-card>
+    <ion-card-content>
+    <ion-item>
+      <ion-label position="floating">Titre</ion-label>
+      <ion-input type="text" #titre></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Description</ion-label>
+      <ion-input type="text" #description></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Location</ion-label>
+    </ion-item>
+    <ion-item>  
+      <ion-input type="file" (change)="onFileSelected($event)" #image></ion-input>
+      <ion-button type="button" (click)="onUpload()">Importer</ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label>Longitude</ion-label>
+      <ion-input type="text" #long></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Latitude</ion-label>
+      <ion-input type="text" #lat></ion-input>
+    </ion-item>
+    <ion-button color="primary" expand="full" (click)="saveSignal(titre, description, image, long, lat)" >Enregistrer</ion-button>
+    </ion-card-content>
+    </ion-card>  
 </ion-content>

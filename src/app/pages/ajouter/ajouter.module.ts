@@ -1,7 +1,8 @@
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
 import { AjouterPage } from './ajouter.page';
 import { AjouterPageRoutingModule } from './ajouter-routing.module';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
@@ -12,7 +13,8 @@ import { NgModule } from '@angular/core';
     FormsModule,
     IonicModule,
     AjouterPageRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   declarations: [AjouterPage]
 })

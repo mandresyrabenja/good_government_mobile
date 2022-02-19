@@ -1,20 +1,13 @@
-import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
 import { CheckTutorial } from './providers/check-tutorial.service';
+import { NgModule } from '@angular/core';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/tutorial',
+    redirectTo: '/menu',
     pathMatch: 'full'
-  },
-    {
-    path: '',
-    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
-  },
-  {
-    path: '',
-    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
   },
   {
     path: '',
