@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
+import { AjouterPage } from './ajouter.page';
+import { AjouterPageRoutingModule } from './ajouter-routing.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
-import { AjouterPageRoutingModule } from './ajouter-routing.module';
-import { AjouterPage } from './ajouter.page';
+import { NgModule } from '@angular/core';
 
 @NgModule({
   imports: [
