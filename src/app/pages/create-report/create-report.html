@@ -1,0 +1,94 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Créer un signalement</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <div class="signup-logo">
+        <img src="assets/img/gg-icon.png" alt="GG Logo"><br>
+        <h2>GOOD GOVERNMENT</h2>
+    </div>
+
+    <form #signupForm="ngForm" novalidate>
+        <ion-list lines="none">
+            <ion-item>
+                <ion-label position="stacked" color="primary">Nom</ion-label>
+                <ion-input [(ngModel)]="signin.firstName" name="firstName" type="text" #firstName="ngModel" required>
+                </ion-input>
+            </ion-item>
+            <ion-text color="danger">
+                <p [hidden]="firstName.valid || submitted === false" class="ion-padding-start">
+                    Le nom est réquis
+                </p>
+            </ion-text>
+
+            <ion-item>
+                <ion-label position="stacked" color="primary">Prénom</ion-label>
+                <ion-input [(ngModel)]="signin.lastName" name="lastName" type="text" #lastName="ngModel" required>
+                </ion-input>
+            </ion-item>
+            <ion-text color="danger">
+                <p [hidden]="lastName.valid || submitted === false" class="ion-padding-start">
+                    Le prénom est réquis
+                </p>
+            </ion-text>
+
+            <ion-item>
+                <ion-label position="stacked" color="primary">Date de naissance</ion-label>
+                <ion-input [(ngModel)]="signin.dob" name="dob" type="date" #dob="ngModel" required>
+                </ion-input>
+            </ion-item>
+            <ion-text color="danger">
+                <p [hidden]="dob.valid || submitted === false" class="ion-padding-start">
+                    La date de naissance est réquis
+                </p>
+            </ion-text>
+
+            <ion-item>
+                <ion-label position="stacked" color="primary">CIN</ion-label>
+                <ion-input [(ngModel)]="signin.cin" name="cin" type="number" #cin="ngModel" required>
+                </ion-input>
+            </ion-item>
+
+            <ion-item>
+                <ion-label position="stacked" color="primary">Email</ion-label>
+                <ion-input [(ngModel)]="signin.email" name="email" type="email" #email="ngModel" required>
+                </ion-input>
+            </ion-item>
+            <ion-text color="danger">
+                <p [hidden]="email.valid || submitted === false" class="ion-padding-start">
+                    L'email est réquis
+                </p>
+            </ion-text>
+
+            <ion-item>
+                <ion-label position="stacked" color="primary">Mot des passe</ion-label>
+                <ion-input [(ngModel)]="signin.password" name="password" type="password" #password="ngModel" required>
+                </ion-input>
+            </ion-item>
+            <ion-text color="danger">
+                <p [hidden]="password.valid || submitted === false" class="ion-padding-start">
+                    Le mot de passe est réquis
+                </p>
+            </ion-text>
+
+
+            <ion-text color="danger">
+                <p *ngIf="errorMsg !== ''" class="ion-padding-start">
+                    {{errorMsg}}
+                </p>
+            </ion-text>
+
+        </ion-list>
+
+        <div class="ion-padding">
+            <ion-button (click)="onSignup(signupForm)" type="submit" expand="block">Créer</ion-button>
+        </div>
+    </form>
+
+</ion-content>
