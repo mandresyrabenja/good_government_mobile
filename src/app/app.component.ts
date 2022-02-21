@@ -41,7 +41,7 @@ export class AppComponent implements OnInit {
     }
   ];
   loggedIn = false;
-  dark = false;
+  dark = true;
 
   constructor(
     private menu: MenuController,

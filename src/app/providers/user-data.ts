@@ -6,6 +6,9 @@ import { Storage } from '@ionic/storage';
   providedIn: 'root'
 })
 export class UserData {
+  signin(cin: number, firstName: string, lastName: string, dob: string, email: string, password: string) {
+  
+  }
   favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';

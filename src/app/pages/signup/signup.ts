@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UserData } from '../../providers/user-data';
 
 import { UserOptions } from '../../interfaces/user-options';
+import { CreateAccount } from '../../interfaces/create-account';
 
 
 
@@ -14,7 +15,7 @@ import { UserOptions } from '../../interfaces/user-options';
   styleUrls: ['./signup.scss'],
 })
 export class SignupPage {
-  signup: UserOptions = { username: '', password: '' };
+  signin: CreateAccount = {cin: 0, firstName: '', lastName: '', dob: '', email: '', password: ''};
   submitted = false;
 
   constructor(
@@ -26,7 +27,9 @@ export class SignupPage {
     this.submitted = true;
 
     if (form.valid) {
-      this.userData.signup(this.signup.username);
+      this.userData.signin(
+        this.signin.cin,this.signin.firstName,this.signin.lastName,
+        this.signin.dob,this.signin.email,this.signin.password);
       this.router.navigateByUrl('/app/tabs/schedule');
     }
   }
