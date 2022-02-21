@@ -39,6 +39,13 @@
                     Le mot de passe est réquis
                 </p>
             </ion-text>
+
+
+            <ion-text color="danger">
+                <p *ngIf="loginFailure === true" class="ion-padding-start">
+                    Email ou mot de passe incorrect
+                </p>
+            </ion-text>
         </ion-list>
 
         <ion-row>

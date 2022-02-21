@@ -20,6 +20,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class LoginPage {
   login: UserOptions = { username: '', password: '' };
   submitted = false;
+  loginFailure = false;
 
   constructor(
     public userData: UserData,
@@ -29,6 +30,7 @@ export class LoginPage {
   ) { }
 
   onLogin(form: NgForm) {
+    this.loginFailure = false;
     this.submitted = true;
 
     if (form.valid) {
@@ -48,6 +50,7 @@ export class LoginPage {
           );
         },
         (error: HttpErrorResponse) => {
+          this.loginFailure = true;
           console.log("erreur http:" + error);
         }
       );
