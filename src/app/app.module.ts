@@ -1,3 +1,4 @@
+import { CitizenService } from './providers/citizen-service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -28,7 +29,7 @@ import { AuthService } from './providers/auth.service';
     })
   ],
   declarations: [AppComponent],
-  providers: [InAppBrowser, SplashScreen, StatusBar, StorageService, AuthService],
+  providers: [InAppBrowser, SplashScreen, StatusBar, StorageService, AuthService, CitizenService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
