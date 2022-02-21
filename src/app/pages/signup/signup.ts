@@ -49,7 +49,7 @@ export class SignupPage {
                   result => {
                     this.authService.isAuth = true;
                     console.log('Login reuissi');
-                    this.router.navigateByUrl('/app/tabs/schedule');
+                    this.router.navigateByUrl('/create-report');
                   }
                   ).catch(e => {
                     console.log("erreur storage: " + e);

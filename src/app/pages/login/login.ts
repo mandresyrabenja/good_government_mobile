@@ -42,7 +42,7 @@ export class LoginPage {
             result => {
               this.authService.isAuth = true;
               console.log('Login reuissi');
-              this.router.navigateByUrl('/app/tabs/schedule');
+              this.router.navigateByUrl('/create-report');
             }
             ).catch(e => {
               console.log("error: " + e);
