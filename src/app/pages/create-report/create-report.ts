@@ -1,17 +1,9 @@
+import { ReportService } from './../../providers/report-service';
+import { CreateReportInterface } from './../../interfaces/create-report-interface';
 import { StorageService } from './../../providers/storage-service';
-import { AuthService } from './../../providers/auth.service';
-import { CitizenService } from './../../providers/citizen-service';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-
-import { UserData } from '../../providers/user-data';
-
-import { UserOptions } from '../../interfaces/user-options';
-import { CreateAccount } from '../../interfaces/create-account';
-import { HttpErrorResponse } from '@angular/common/http';
-
-
 
 @Component({
   selector: 'create-report',
@@ -19,53 +11,39 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./create-report.scss'],
 })
 export class CreateReport {
-  signin: CreateAccount = {cin: 0, firstName: '', lastName: '', dob: '', email: '', password: ''};
+  signin: CreateReportInterface = {title : '', description : '', latitude : -18.99583635039157, longitude : 49.0599632263137};
   submitted = false;
   errorMsg = '';
+  file : File;
+  isModalOpen = true;
 
   constructor(
     public router: Router,
-    public userData: UserData,
-    public citizenService: CitizenService,
-    public authService: AuthService,
-    public storageService: StorageService
+    public storageService: StorageService,
+    public reportService : ReportService
   ) {}
 
-  onSignup(form: NgForm) {
+  onFileChange(fileChangeEvent) {
+    this.file = fileChangeEvent.target.files[0];
+  }
+
+  async onCreateReport(form: NgForm) {
     this.submitted = true;
     this.errorMsg = '';
 
-    if (form.valid) {
-      this.citizenService.createCitizen(this.signin)
-        .subscribe(
-          (response) => {
-            console.log('Création du compte reuissi');
+    if(form.valid) {
 
-            this.authService.login(this.signin.email, this.signin.password)
-            .subscribe(
-              (res) => {
-                let token = res.headers.get('Authorization');
-                this.storageService.set('token', token).then(
-                  result => {
-                    this.authService.isAuth = true;
-                    console.log('Login reuissi');
-                    this.router.navigateByUrl('/app/tabs/schedule');
-                  }
-                  ).catch(e => {
-                    console.log("erreur storage: " + e);
-                  }
-                );
-              },
-              (error: HttpErrorResponse) => {
-                console.log("erreur http login:" + error);
-              }
-            );
-          },
-          (error: any) => {
-            this.errorMsg = error.error.msg;
-            console.log("erreur http inscription:" + JSON.stringify(error) );
-          }
-        );
+      let formData = new FormData();
+      formData.append('title', this.signin.title);
+      formData.append('description', this.signin.description);
+      formData.append("image", this.file, this.file.name);
+
+      console.log()
+      this.storageService.setObject('new_report', formData);
+      this.router.navigateByUrl('/app/tabs/map');
+
     }
+
   }
+
 }

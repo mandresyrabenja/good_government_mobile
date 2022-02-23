@@ -18,31 +18,46 @@
         <ion-list lines="none">
             <ion-item>
                 <ion-label position="stacked" color="primary">Titre</ion-label>
-                <ion-input [(ngModel)]="signin.firstName" name="firstName" type="text" #firstName="ngModel" required>
+                <ion-input [(ngModel)]="signin.title" name="title" type="text" #title="ngModel" required>
                 </ion-input>
             </ion-item>
             <ion-text color="danger">
-                <p [hidden]="firstName.valid || submitted === false" class="ion-padding-start">
+                <p [hidden]="title.valid || submitted === false" class="ion-padding-start">
                     Le titre est réquis
                 </p>
             </ion-text>
 
             <ion-item>
                 <ion-label position="stacked" color="primary">Description</ion-label>
-                <ion-textarea [(ngModel)]="signin.lastName" name="lastName" type="text" #lastName="ngModel" required>
+                <ion-textarea [(ngModel)]="signin.description" name="description" #description="ngModel" required>
                 </ion-textarea>
             </ion-item>
             <ion-text color="danger">
-                <p [hidden]="lastName.valid || submitted === false" class="ion-padding-start">
+                <p [hidden]="description.valid || submitted === false" class="ion-padding-start">
                     La description est réquis
                 </p>
             </ion-text>
 
+            <ion-item>
+                <ion-label position="stacked" color="primary">Photo</ion-label>
+                <input type="file" (change)="onFileChange($event)" />
+            </ion-item>
+
+            <ion-text color="danger">
+                <p *ngIf="errorMsg !== ''" class="ion-padding-start">
+                    {{errorMsg}}
+                </p>
+            </ion-text>
         </ion-list>
 
         <div class="ion-padding">
-            <ion-button (click)="onSignup(signupForm)" type="submit" expand="block">Signaler</ion-button>
+            <ion-button (click)="onCreateReport(signupForm)" type="submit" expand="block">Signaler</ion-button>
         </div>
     </form>
 
+    <!-- <ion-modal [isOpen]="isModalOpen">
+        <ng-template>
+            <app-modal-content></app-modal-content>
+        </ng-template>
+    </ion-modal> -->
 </ion-content>
