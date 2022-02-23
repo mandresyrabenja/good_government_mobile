@@ -1,7 +1,7 @@
 import { StorageService } from './../../providers/storage-service';
 import { Component, ElementRef, Inject, ViewChild, AfterViewInit } from '@angular/core';
 import { ConferenceData } from '../../providers/conference-data';
-import { Platform } from '@ionic/angular';
+import { ModalController, Platform } from '@ionic/angular';
 import { DOCUMENT} from '@angular/common';
 
 import { darkStyle } from './map-dark-style';
@@ -19,7 +19,8 @@ export class MapPage implements AfterViewInit {
     @Inject(DOCUMENT) private doc: Document,
     public confData: ConferenceData,
     public platform: Platform,
-    public storageService : StorageService) {}
+    public storageService : StorageService,
+    public modalCtrl: ModalController) {}
 
   async ngAfterViewInit() {
     const appEl = this.doc.querySelector('ion-app');
@@ -35,55 +36,57 @@ export class MapPage implements AfterViewInit {
 
     let map;
 
-    this.confData.getMap().subscribe((mapData: any) => {
-      const mapEle = this.mapElement.nativeElement;
+    this.confData.getMap().subscribe(
+      (mapData: any) => {
+        const mapEle = this.mapElement.nativeElement;
 
-      map = new googleMaps.Map(mapEle, {
-        center: { lat: -18.91544018548976, lng: 47.52206152373752 },
-        zoom: 8,
-        styles: style
-      });
+        map = new googleMaps.Map(mapEle, {
+          center: { lat: -18.91544018548976, lng: 47.52206152373752 },
+          zoom: 8,
+          styles: style
+        });
 
-      map.setMapTypeId('hybrid');
+        map.setMapTypeId('hybrid');
 
-      googleMaps.event.addListenerOnce(map, 'idle', () => {
-        mapEle.classList.add('show-map');
-      });
+        googleMaps.event.addListenerOnce(map, 'idle', () => {
+          mapEle.classList.add('show-map');
+        });
 
-      map.addListener("click", (mapsMouseEvent) => {
+        map.addListener("click", (mapsMouseEvent) => {
 
-        this.storageService.getObject('new_report').then(
-          (formData) => {
-            if(formData != null) {
-              console.log(formData);
-              // formData.append('latitude', String(mapsMouseEvent.latLng.toJSON().lat));
-              // formData.append('longitude', String(mapsMouseEvent.latLng.toJSON().lng));
-            }
-          }
-          ).catch(e => {
-            console.log("Erreur lors du tentative de récupération du form-data: " + e);
+          var latLng : number[] = [];
+          latLng[0] = mapsMouseEvent.latLng.toJSON().lat;
+          latLng[1] = mapsMouseEvent.latLng.toJSON().lng;
+
+          this.dismiss(latLng);
+        });
+
+        const observer = new MutationObserver(
+          (mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.attributeName === 'class') {
+                const el = mutation.target as HTMLElement;
+                isDark = el.classList.contains('dark-theme');
+                if (map && isDark) {
+                  map.setOptions({styles: darkStyle});
+                } else if (map) {
+                  map.setOptions({styles: []});
+                }
+              }
+            });
           }
         );
-      });
+        observer.observe(appEl, {
+          attributes: true
+        });
+      }
+    );
+  }
 
-    });
-
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          const el = mutation.target as HTMLElement;
-          isDark = el.classList.contains('dark-theme');
-          if (map && isDark) {
-            map.setOptions({styles: darkStyle});
-          } else if (map) {
-            map.setOptions({styles: []});
-          }
-        }
-      });
-    });
-    observer.observe(appEl, {
-      attributes: true
-    });
+  dismiss(data?: any) {
+    // using the injected ModalController this page
+    // can "dismiss" itself and pass back data
+    this.modalCtrl.dismiss(data);
   }
 }
 
@@ -110,4 +113,3 @@ function getGoogleMaps(apiKey: string): Promise<any> {
     };
   });
 }
-

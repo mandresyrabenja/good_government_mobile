@@ -39,6 +39,10 @@
             </ion-text>
 
             <ion-item>
+                <ion-button (click)="displayMap()" type="submit">Coordonées</ion-button>
+            </ion-item>
+
+            <ion-item>
                 <ion-label position="stacked" color="primary">Photo</ion-label>
                 <input type="file" (change)="onFileChange($event)" />
             </ion-item>
@@ -48,16 +52,11 @@
                     {{errorMsg}}
                 </p>
             </ion-text>
+
         </ion-list>
 
         <div class="ion-padding">
-            <ion-button (click)="onCreateReport(signupForm)" type="submit" expand="block">Signaler</ion-button>
+            <ion-button (click)="displayMap()" type="submit" expand="block">Signaler</ion-button>
         </div>
     </form>
-
-    <!-- <ion-modal [isOpen]="isModalOpen">
-        <ng-template>
-            <app-modal-content></app-modal-content>
-        </ng-template>
-    </ion-modal> -->
 </ion-content>
