@@ -14,13 +14,13 @@ import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
   styleUrls: ['./create-report.scss'],
 })
 export class CreateReport {
-  signin: CreateReportInterface = {title : '', description : '', latitude : -18.99583635039157, longitude : 49.0599632263137};
+  signin: CreateReportInterface = {title : '', description : '', latitude : 0, longitude : 0};
   submitted = false;
   errorMsg = '';
   file : File;
   isModalOpen = true;
-  excludeTracks: any = [];
-  latLng : number[] = [];
+  noReportLocation: boolean = false;
+  noReportPhoto: boolean = false;
 
   constructor(
     public router: Router,
@@ -34,37 +34,53 @@ export class CreateReport {
     const modal = await this.modalCtrl.create({
       component: MapPage,
       swipeToClose: true,
-      presentingElement: this.routerOutlet.nativeEl,
-      componentProps: { excludedTracks: this.excludeTracks }
+      presentingElement: this.routerOutlet.nativeEl
     });
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
     if(data) {
-      this.latLng = data;
-      console.log("Coordonnés: " + this.latLng);
+      this.signin.latitude = data[0];
+      this.signin.longitude = data[1];
+      this.noReportLocation = false;
     }
   }
 
   onFileChange(fileChangeEvent) {
     this.file = fileChangeEvent.target.files[0];
+    this.noReportPhoto = false;
   }
 
   async onCreateReport(form: NgForm) {
     this.submitted = true;
     this.errorMsg = '';
 
-    if(form.valid) {
+    if(form.valid && (this.signin.latitude != 0) && (this.signin.longitude != 0) && (this.file != undefined) ) {
 
       let formData = new FormData();
       formData.append('title', this.signin.title);
       formData.append('description', this.signin.description);
+      formData.append('latitude', this.signin.description);
+      formData.append('longitude', this.signin.description);
       formData.append("image", this.file, this.file.name);
 
-      console.log()
-      this.storageService.setObject('new_report', formData);
-      this.router.navigateByUrl('/app/tabs/map');
+      this.reportService.createReport(formData).subscribe(
+        (response) => {
+          console.log("Signalement créé");
+        },
+        (error) => {
+          console.log(error.error);
+        }
+      );
 
+    } else if( (this.signin.latitude == 0) || (this.signin.longitude == 0) ) {
+      this.noReportLocation = true;
+
+    } else if(this.file == undefined) {
+      this.noReportPhoto = true;
+
+    } else {
+      this.errorMsg = 'Veuillez remplir tous les champs du formulaire';
     }
 
   }
