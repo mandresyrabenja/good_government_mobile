@@ -66,7 +66,7 @@ export class CreateReport {
 
       this.reportService.createReport(formData).subscribe(
         (response) => {
-          console.log("Signalement créé");
+          this.router.navigateByUrl('/app/tabs/schedule');
         },
         (error) => {
           console.log("Erreur http durant du création de signalement: " + error);
