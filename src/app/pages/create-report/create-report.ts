@@ -60,16 +60,16 @@ export class CreateReport {
       let formData = new FormData();
       formData.append('title', this.signin.title);
       formData.append('description', this.signin.description);
-      formData.append('latitude', this.signin.description);
-      formData.append('longitude', this.signin.description);
-      formData.append("image", this.file, this.file.name);
+      formData.append('latitude', this.signin.latitude.toString());
+      formData.append('longitude', this.signin.longitude.toString());
+      formData.append("image", this.file);
 
       this.reportService.createReport(formData).subscribe(
         (response) => {
           console.log("Signalement créé");
         },
         (error) => {
-          console.log(error.error);
+          console.log("Erreur http durant du création de signalement: " + error);
         }
       );
 

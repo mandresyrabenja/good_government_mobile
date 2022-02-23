@@ -1,5 +1,5 @@
 import { CitizenService } from './providers/citizen-service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
@@ -15,6 +15,7 @@ import { environment } from '../environments/environment';
 import { FormsModule } from '@angular/forms';
 import { StorageService } from './providers/storage-service';
 import { AuthService } from './providers/auth.service';
+import { AuthInterceptor } from './providers/auth-interceptor.service';
 
 @NgModule({
   imports: [
@@ -29,7 +30,14 @@ import { AuthService } from './providers/auth.service';
     })
   ],
   declarations: [AppComponent],
-  providers: [InAppBrowser, SplashScreen, StatusBar, StorageService, AuthService, CitizenService],
+  providers: [
+    InAppBrowser, SplashScreen, StatusBar, StorageService, AuthService, CitizenService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

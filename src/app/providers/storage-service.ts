@@ -9,7 +9,7 @@ export class StorageService {
 
   constructor(public storage: Storage)
   {
-    console.log('Your storage provider is working here !');
+    console.log('Stockage initialisé');
   }
 
   // set a key/value
@@ -27,7 +27,20 @@ export class StorageService {
   async get(key: string): Promise<any> {
     try {
       const result = await this.storage.get(key);
-      console.log('storageGET: ' + key + ': ' + result);
+      if (result != null) {
+      return result;
+      }
+      return null;
+    } catch (reason) {
+      console.log(reason);
+      return null;
+    }
+  }
+
+  // to get a key/value pair
+  async getToken(): Promise<any> {
+    try {
+      const result = await this.storage.get('token');
       if (result != null) {
       return result;
       }
