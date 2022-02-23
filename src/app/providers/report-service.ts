@@ -16,4 +16,8 @@ export class ReportService {
     return this.http.post(this.baseUrl, report);
   }
 
+  getReports() : Observable<any>  {
+    return this.http.get(this.baseUrl + '?page=0');
+  }
+
 }
