@@ -23,4 +23,12 @@ export class ReportService {
   getReport(id) : Observable<any>  {
     return this.http.get(this.baseUrl + '/' + id);
   }
+  /**
+   * Avoir le photo d'un signalement de problème
+   * @param idReport ID du signalement
+   * @returns Photo du signalement
+   */
+  getImage(idReport: string): Observable<Blob> {
+    return this.http.get(this.baseUrl + "/" + idReport + "/photo", { responseType: 'blob' });
+  }
 }
