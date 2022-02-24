@@ -20,4 +20,7 @@ export class ReportService {
     return this.http.get(this.baseUrl + '?page=0');
   }
 
+  getReport(id) : Observable<any>  {
+    return this.http.get(this.baseUrl + '/' + id);
+  }
 }

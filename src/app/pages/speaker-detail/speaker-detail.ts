@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ReportService } from './../../providers/report-service';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConferenceData } from '../../providers/conference-data';
 import { ActionSheetController } from '@ionic/angular';
@@ -9,29 +10,28 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
   templateUrl: 'speaker-detail.html',
   styleUrls: ['./speaker-detail.scss'],
 })
-export class SpeakerDetailPage {
-  speaker: any;
+export class SpeakerDetailPage{
+  report: any;
+  photo = '';
 
   constructor(
-    private dataProvider: ConferenceData,
     private route: ActivatedRoute,
     public actionSheetCtrl: ActionSheetController,
     public confData: ConferenceData,
     public inAppBrowser: InAppBrowser,
+    public reportService : ReportService
   ) {}
 
   ionViewWillEnter() {
-    this.dataProvider.load().subscribe((data: any) => {
-      const speakerId = this.route.snapshot.paramMap.get('speakerId');
-      if (data && data.speakers) {
-        for (const speaker of data.speakers) {
-          if (speaker && speaker.id === speakerId) {
-            this.speaker = speaker;
-            break;
-          }
-        }
+    const reportId = this.route.snapshot.paramMap.get('speakerId');
+    this.reportService.getReport(reportId).subscribe(
+      (resp : any) => {
+        this.report = resp;
+      },
+      (error) => {
+        console.log(error);
       }
-    });
+    );
   }
 
   openExternalUrl(url: string) {
