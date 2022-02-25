@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ReportService } from './../../providers/report-service';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ConferenceData } from '../../providers/conference-data';
 import { ActionSheetController } from '@ionic/angular';
@@ -9,29 +10,63 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
   templateUrl: 'speaker-detail.html',
   styleUrls: ['./speaker-detail.scss'],
 })
-export class SpeakerDetailPage {
-  speaker: any;
+export class SpeakerDetailPage{
+  report: any;
+  isImageLoading = false;
+  imageToShow: any;
 
   constructor(
-    private dataProvider: ConferenceData,
     private route: ActivatedRoute,
     public actionSheetCtrl: ActionSheetController,
     public confData: ConferenceData,
     public inAppBrowser: InAppBrowser,
+    public reportService : ReportService
   ) {}
 
-  ionViewWillEnter() {
-    this.dataProvider.load().subscribe((data: any) => {
-      const speakerId = this.route.snapshot.paramMap.get('speakerId');
-      if (data && data.speakers) {
-        for (const speaker of data.speakers) {
-          if (speaker && speaker.id === speakerId) {
-            this.speaker = speaker;
-            break;
-          }
-        }
+  /**
+   * Créer une image à partir d'un fichier obtenu à partir d'une requête HTTP
+   * @param image Reponse HTTP
+   */
+   createImageFromBlob(image: Blob) {
+    let reader = new FileReader();
+    reader.addEventListener(
+        "load",
+        () => { this.imageToShow = reader.result; },
+        false
+    );
+
+    if (image) { reader.readAsDataURL(image); }
+  }
+
+  /**
+   * Avoir le photo d'un signalement
+   * @param idReport ID su signalement
+   */
+  getImageFromService(idReport) {
+    this.isImageLoading = true;
+    this.reportService.getImage(idReport).subscribe(
+      data => {
+        this.createImageFromBlob(data);
+        this.isImageLoading = false;
+      },
+      error => {
+        this.isImageLoading = false;
+        console.log(error);
       }
-    });
+    );
+  }
+
+  ionViewWillEnter() {
+    const reportId = this.route.snapshot.paramMap.get('speakerId');
+    this.reportService.getReport(reportId).subscribe(
+      (resp : any) => {
+        this.report = resp;
+        this.getImageFromService(reportId);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   openExternalUrl(url: string) {

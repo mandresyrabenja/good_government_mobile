@@ -1,3 +1,4 @@
+import { StorageService } from './providers/storage-service';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
@@ -20,28 +21,33 @@ import { UserData } from './providers/user-data';
 export class AppComponent implements OnInit {
   appPages = [
     {
-      title: 'Schedule',
+      title: 'Signaler',
+      url: '/create-report',
+      icon: 'add'
+    },
+    {
+      title: 'Liste des signalements',
       url: '/app/tabs/schedule',
-      icon: 'calendar'
-    },
-    {
-      title: 'Speakers',
-      url: '/app/tabs/speakers',
-      icon: 'people'
-    },
-    {
-      title: 'Map',
-      url: '/app/tabs/map',
-      icon: 'map'
-    },
-    {
-      title: 'About',
-      url: '/app/tabs/about',
-      icon: 'information-circle'
+      icon: 'list'
     }
+    // {
+    //   title: 'Speakers',
+    //   url: '/app/tabs/speakers',
+    //   icon: 'people'
+    // },
+    // {
+    //   title: 'Map',
+    //   url: '/app/tabs/map',
+    //   icon: 'map'
+    // },
+    // {
+    //   title: 'About',
+    //   url: '/app/tabs/about',
+    //   icon: 'information-circle'
+    // }
   ];
   loggedIn = false;
-  dark = false;
+  dark = true;
 
   constructor(
     private menu: MenuController,
@@ -53,6 +59,7 @@ export class AppComponent implements OnInit {
     private userData: UserData,
     private swUpdate: SwUpdate,
     private toastCtrl: ToastController,
+    private storageService: StorageService
   ) {
     this.initializeApp();
   }
@@ -116,9 +123,8 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.userData.logout().then(() => {
-      return this.router.navigateByUrl('/app/tabs/schedule');
-    });
+    this.storageService.remove('token');
+    this.router.navigateByUrl('/login');
   }
 
   openTutorial() {

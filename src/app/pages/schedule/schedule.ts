@@ -1,3 +1,4 @@
+import { ReportService } from './../../providers/report-service';
 import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, IonList, IonRouterOutlet, LoadingController, ModalController, ToastController, Config } from '@ionic/angular';
@@ -20,8 +21,8 @@ export class SchedulePage implements OnInit {
   queryText = '';
   segment = 'all';
   excludeTracks: any = [];
-  shownSessions: any = [];
-  groups: any = [];
+  shownReports = 0;
+  reports: any = [];
   confDate: string;
   showSearchbar: boolean;
 
@@ -34,7 +35,8 @@ export class SchedulePage implements OnInit {
     public routerOutlet: IonRouterOutlet,
     public toastCtrl: ToastController,
     public user: UserData,
-    public config: Config
+    public config: Config,
+    public reportService : ReportService
   ) { }
 
   ngOnInit() {
@@ -49,10 +51,17 @@ export class SchedulePage implements OnInit {
       this.scheduleList.closeSlidingItems();
     }
 
-    this.confData.getTimeline(this.dayIndex, this.queryText, this.excludeTracks, this.segment).subscribe((data: any) => {
-      this.shownSessions = data.shownSessions;
-      this.groups = data.groups;
-    });
+    this.reportService.getReports().subscribe(
+      (resp) => {
+        this.reports = resp;
+        this.shownReports = 1;
+        for(let i = 0; i < this.reports.length; i++) {
+          if(this.reports[i].status == 'new') this.reports[i].style = 'Ionic';
+          if(this.reports[i].status == 'processing') this.reports[i].style = 'angular';
+          if(this.reports[i].status == 'done') this.reports[i].style = 'design';
+        };
+      }
+    );
   }
 
   async presentFilter() {

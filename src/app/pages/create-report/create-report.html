@@ -1,0 +1,72 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>Signaler un problème</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+    <div class="signup-logo">
+        <img src="assets/img/gg-icon.png" alt="GG Logo"><br>
+        <h2>GOOD GOVERNMENT</h2>
+    </div>
+
+    <form #signupForm="ngForm" novalidate>
+        <ion-list lines="none">
+            <ion-item>
+                <ion-label position="stacked" color="primary">Titre</ion-label>
+                <ion-input [(ngModel)]="signin.title" name="title" type="text" #title="ngModel" required>
+                </ion-input>
+            </ion-item>
+            <ion-text color="danger">
+                <p [hidden]="title.valid || submitted === false" class="ion-padding-start">
+                    Le titre est réquis
+                </p>
+            </ion-text>
+
+            <ion-item>
+                <ion-label position="stacked" color="primary">Description</ion-label>
+                <ion-textarea [(ngModel)]="signin.description" name="description" #description="ngModel" required>
+                </ion-textarea>
+            </ion-item>
+            <ion-text color="danger">
+                <p [hidden]="description.valid || submitted === false" class="ion-padding-start">
+                    La description est réquis
+                </p>
+            </ion-text>
+
+            <ion-item>
+                <ion-button (click)="displayMap()" type="submit">Coordonées</ion-button>
+            </ion-item>
+            <ion-text color="danger">
+                <p *ngIf="noReportLocation === true" class="ion-padding-start">
+                    Les coordonnées du problème est réquis
+                </p>
+            </ion-text>
+
+            <ion-item>
+                <ion-label position="stacked" color="primary">Photo</ion-label>
+                <input type="file" (change)="onFileChange($event)" />
+            </ion-item>
+            <ion-text color="danger">
+                <p *ngIf="noReportPhoto === true" class="ion-padding-start">
+                    Le photo du problème est réquis
+                </p>
+            </ion-text>
+
+            <ion-text color="danger">
+                <p *ngIf="errorMsg !== ''" class="ion-padding-start">
+                    {{errorMsg}}
+                </p>
+            </ion-text>
+
+        </ion-list>
+
+        <div class="ion-padding">
+            <ion-button (click)="onCreateReport(signupForm)" type="submit" expand="block">Signaler</ion-button>
+        </div>
+    </form>
+</ion-content>
